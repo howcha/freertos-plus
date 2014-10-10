@@ -15,6 +15,7 @@ typedef struct {
 	const char *desc;
 } cmdlist;
 int fibonacci(int number);
+int myatoi(const char*);
 
 void ls_command(int, char **);
 void man_command(int, char **);
@@ -156,7 +157,8 @@ void test_command(int n, char *argv[]) {
     }
     handle = host_action(SYS_OPEN, "output/syslog", 8);
 
-fio_printf(1,"fibonacci number is %d\r\n", fibonacci(10));
+int num = myatoi(argv[1]);
+fio_printf(1,"fibonacci number is %d\r\n", fibonacci(num));
 
     char *buffer = "Test host_write function which can write data to output/syslog\n";
     error = host_action(SYS_WRITE, handle, (void *)buffer, strlen(buffer));
@@ -184,4 +186,14 @@ int fibonacci(int x)
 	if(x<=0) return 0;
 	if(x<=1) return 1;
 	return  fibonacci(x-1) + fibonacci(x-2);
+}
+int myatoi(const char* str)
+{
+	int result = 0;
+	while(*str!=0){
+	result*=10;
+	result+=*str-'0';
+	str++;
+	}
+	return result;
 }
