@@ -14,6 +14,7 @@ typedef struct {
 	cmdfunc *fptr;
 	const char *desc;
 } cmdlist;
+int fibonacci(int number);
 
 void ls_command(int, char **);
 void man_command(int, char **);
@@ -68,8 +69,8 @@ int filedump(const char *filename){
 
 	int fd=fs_open(filename, 0, O_RDONLY);
 
-	if(fd==OPENFAIL||fd<0)
-		return 0;
+	if (fd<0)  // open fail
+	return 0;
 
 	fio_printf(1, "\r\n");
 
@@ -155,6 +156,8 @@ void test_command(int n, char *argv[]) {
     }
     handle = host_action(SYS_OPEN, "output/syslog", 8);
 
+fio_printf(1,"fibonacci number is %d\r\n", fibonacci(10));
+
     char *buffer = "Test host_write function which can write data to output/syslog\n";
     error = host_action(SYS_WRITE, handle, (void *)buffer, strlen(buffer));
     if(error != 0) {
@@ -175,4 +178,10 @@ cmdfunc *do_command(const char *cmd){
 			return cl[i].fptr;
 	}
 	return NULL;	
+}
+int fibonacci(int x)
+{
+	if(x<=0) return 0;
+	if(x<=1) return 1;
+	return  fibonacci(x-1) + fibonacci(x-2);
 }
